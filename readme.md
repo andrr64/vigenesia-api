@@ -176,7 +176,7 @@ _Dibawah ini merupakan instruksi persiapan hingga aplikasi siap digunakan. Ikuti
 
 ## Penggunaan
 
-Kode backend **HANYA BISA DIGUNAKAN** di aplikasi ViGeNesia kelompok kami buat ([disini]()). Jika anda masih menggunakan kode versi lama flutter ViGeNesia dari UBSI maka **ITU TIDAK AKAN COCOK** dengan backend ini. Silahkan buka link app ViGeNesia yang kami sudah buat, gratis.
+Kode backend **HANYA BISA DIGUNAKAN** di aplikasi ViGeNesia kelompok kami buat ([disini](https://github.com/andrr64/vigenesia_app). Jika anda masih menggunakan kode versi lama flutter ViGeNesia dari UBSI maka **ITU TIDAK AKAN COCOK** dengan backend ini. Silahkan buka link app ViGeNesia yang kami sudah buat, gratis.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

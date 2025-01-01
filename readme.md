@@ -52,7 +52,7 @@
 
 <!-- ABOUT THE PROJECT -->
 
-## About The Project {#readme-top}
+## About The Project
 
 **vigenesia_expressjs** adalah kode server-side yang dirancang untuk mendukung aplikasi Vigenesia App. Proyek ini menggunakan teknologi modern seperti Express.js untuk membangun API yang andal dan efisien, Sequelize sebagai ORM untuk pengelolaan database, dan Firebase untuk penyimpanan avatar pengguna.
 

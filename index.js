@@ -10,7 +10,6 @@ import firebaseConfig from "./firebase/config.js";
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT;
 
 app.use(express.json());
 
@@ -49,7 +48,8 @@ const startServer = async () => {
   app.use('/api/user', user_route);
   app.use('/api/motivasi', motivasi_route);
   app.use('/api/motivasi/komentar', motivasi_komentar_route);
-    
+  
+  const PORT = process.env.PORT;
   app.listen(PORT, () => {
     console.log(`Server berjalan di http://localhost:${PORT}`);
   });

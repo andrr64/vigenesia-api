@@ -38,7 +38,6 @@ const connectToDatabase = async (maxRetries = 5, retryInterval = 5000) => {
 };
 
 const startServer = async () => {
-  // Menunggu koneksi ke database berhasil
   await connectToDatabase();
 
   const paksa = false;

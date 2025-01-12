@@ -129,7 +129,6 @@ export const getMotivasi = async (req, res) => {
 
 export const updateMotivasi = async (req, res) => {
   const clientIp = req.ip; // Dapatkan IP klien
-  console.log(`Request dari IP: ${clientIp}`); // Log IP klien
 
   const { iduser, idmotivasi } = req.query;
   const { isi_motivasi, link_gambar } = req.body;
@@ -158,10 +157,9 @@ export const updateMotivasi = async (req, res) => {
         if (motivasi.link_gambar?.length > 0) {
           const oldFileRef = ref(storage, motivasi.link_gambar);
           await deleteObject(oldFileRef);
-          console.log(`File lama '${motivasi.link_gambar}' berhasil dihapus.`);
         }
-      } catch (error) {
-        console.log(`Exception: ${error}`);
+      } catch (_) {
+
       } finally {
         motivasi.link_gambar = fileUrl;
       }

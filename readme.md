@@ -52,7 +52,7 @@
 
 <!-- ABOUT THE PROJECT -->
 
-## About The Project {#readme-top}
+## About The Project
 
 **vigenesia_expressjs** adalah kode server-side yang dirancang untuk mendukung aplikasi Vigenesia App. Proyek ini menggunakan teknologi modern seperti Express.js untuk membangun API yang andal dan efisien, Sequelize sebagai ORM untuk pengelolaan database, dan Firebase untuk penyimpanan avatar pengguna.
 
@@ -176,7 +176,7 @@ _Dibawah ini merupakan instruksi persiapan hingga aplikasi siap digunakan. Ikuti
 
 ## Penggunaan
 
-Kode backend **HANYA BISA DIGUNAKAN** di aplikasi ViGeNesia kelompok kami buat ([disini]()). Jika anda masih menggunakan kode versi lama flutter ViGeNesia dari UBSI maka **ITU TIDAK AKAN COCOK** dengan backend ini. Silahkan buka link app ViGeNesia yang kami sudah buat, gratis.
+Kode backend **HANYA BISA DIGUNAKAN** di aplikasi ViGeNesia kelompok kami buat ([disini](https://github.com/andrr64/vigenesia_app)). Jika anda masih menggunakan kode versi lama flutter ViGeNesia dari UBSI maka **ITU TIDAK AKAN COCOK** dengan backend ini. Silahkan buka link app ViGeNesia yang kami sudah buat, gratis.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

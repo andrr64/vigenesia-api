@@ -7,6 +7,20 @@ import sequelize from "./db.js";
 import { initializeApp } from "firebase/app";
 import firebaseConfig from "./firebase/config.js";
 
+import os from 'os'; // Perbaiki impor os di sini
+
+const getLocalIp = () => {
+  const networkInterfaces = os.networkInterfaces();
+  for (const interfaceName in networkInterfaces) {
+    for (const details of networkInterfaces[interfaceName]) {
+      if (details.family === 'IPv4' && !details.internal) {
+        console.log(`Local IP: ${details.address}`);
+        return details.address;
+      }
+    }
+  }
+};
+
 dotenv.config();
 
 const app = express();
@@ -50,7 +64,7 @@ const startServer = async () => {
   
   const PORT = process.env.PORT;
   app.listen(PORT, () => {
-    console.log(`Server berjalan di http://localhost:${PORT}`);
+    console.log(`Server berjalan di http://${getLocalIp()}:${PORT}`);
   });
 };
 

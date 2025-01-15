@@ -1,60 +1,8 @@
-<!-- Improved compatibility of back to top link: See: https://github.com/othneildrew/Best-README-Template/pull/73
-<a id="readme-top"></a>
-<!--
-*** Thanks for checking out the Best-README-Template. If you have a suggestion
-*** that would make this better, please fork the repo and create a pull request
-*** or simply open an issue with the tag "enhancement".
-*** Don't forget to give the project a star!
-*** Thanks again! Now go create something AMAZING! :D
--->
-
-<!-- PROJECT SHIELDS -->
-<!--
-*** I'm using markdown "reference style" links for readability.
-*** Reference links are enclosed in brackets [ ] instead of parentheses ( ).
-*** See the bottom of this document for the declaration of the reference variables
-*** for contributors-url, forks-url, etc. This is an optional, concise syntax you may use.
-*** https://www.markdownguide.org/basic-syntax/#reference-style-links
--->
-<!-- [![Contributors][contributors-shield]][contributors-url]
-[![Forks][forks-shield]][forks-url]
-[![Stargazers][stars-shield]][stars-url]
-[![Issues][issues-shield]][issues-url]
-[![Unlicense License][license-shield]][license-url]
-[![LinkedIn][linkedin-shield]][linkedin-url] -->
-
-<!-- TABLE OF CONTENTS -->
-<!-- <details>
-  <summary>Table of Contents</summary>
-  <ol>
-    <li>
-      <a href="#about-the-project">About The Project</a>
-      <ul>
-        <li><a href="#built-with">Built With</a></li>
-      </ul>
-    </li>
-    <li>
-      <a href="#getting-started">Getting Started</a>
-      <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#installation">Installation</a></li>
-      </ul>
-    </li>
-    <li><a href="#usage">Usage</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
-    <li><a href="#contributing">Contributing</a></li>
-    <li><a href="#license">License</a></li>
-    <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li>
-  </ol>
-</details>
- -->
-
 <!-- ABOUT THE PROJECT -->
 
 ## Tentang Proyek
 
-**vigenesia-api** adalah kode server-side yang dirancang untuk mendukung aplikasi Vigenesia App. Proyek ini menggunakan teknologi modern seperti Express.js untuk membangun API yang andal dan efisien, Sequelize sebagai ORM untuk pengelolaan database, dan Firebase untuk penyimpanan avatar pengguna.
+Kode server-side yang dirancang untuk mendukung aplikasi Vigenesia+. Proyek ini menggunakan teknologi modern seperti Express.js untuk membangun API yang andal dan efisien, Sequelize sebagai ORM untuk pengelolaan database, dan Firebase untuk penyimpanan avatar pengguna.
 
 ### Teknologi yang digunakan
 
@@ -92,16 +40,16 @@ _Dibawah ini merupakan instruksi persiapan hingga aplikasi siap digunakan. Ikuti
 
 1. *Clone* repositori
    ```sh
-   git clone https://github.com/andrr64/vigenesia_expressjs.git
+   git clone https://github.com/andrr64/vigenesia-server.git
    ```
-2. Masuk kedalam folder proyek lalau install *package* NPM yang diperlukan menggunakan perintah
+2. Masuk kedalam folder proyek lalu install *package* yang diperlukan menggunakan perintah
    ```sh
    npm install
    ```
 3. Set API Firebase di file **./firebase/config.js**
    ```js
    const firebaseConfig = {
-     apiKey: process.env.FIREBASE_API_KEY_WEB,
+     apiKey: process.env.FIREBASE_API_KEY_WEB(jika menggunakan env) atau ketik langsung disini, contoh: edja8877dsansajdas714h1280ads,
      authDomain: process.env.FIREBASE_AUTH_DOMAIN,
      projectId: process.env.FIREBASE_PROJECT_ID,
      storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
@@ -121,10 +69,12 @@ _Dibawah ini merupakan instruksi persiapan hingga aplikasi siap digunakan. Ikuti
     dotenv.config();
 
     // Ganti DATABASE_URL
-    const databaseurl = process.env.DATABASE_URL
+    const databaseurl = process.env.DATABASE_URL atau bisa di isi langsung dengan alamat database (lihat dibawah)
     // Ganti menjadi misal
-    // const databaseurl = "postgresql://myuser:mypassword@localhost:5432/mydatabase"
-
+    // template --> postgresql://nama_akun:password_akun@localhost:5432/nama_database
+    // contoh   --> postgresql://postgres:root@localhost:5432/vigenesia
+    // pastikan sudah membuat database 'vigenesia'. Bingung? lihat panduan online tentang cara membuat database di postgresql
+   
     const sequelize = new Sequelize(databaseurl, {
       dialect: 'postgres',
       logging: false,
@@ -176,7 +126,7 @@ _Dibawah ini merupakan instruksi persiapan hingga aplikasi siap digunakan. Ikuti
 
 ## Penggunaan
 
-Kode backend **HANYA BISA DIGUNAKAN** di aplikasi ViGeNesia kelompok kami buat ([disini](https://github.com/andrr64/vigenesia_app)). Jika anda masih menggunakan kode versi lama flutter ViGeNesia dari UBSI maka **ITU TIDAK AKAN COCOK** dengan backend ini. Silahkan buka link app ViGeNesia yang kami sudah buat, gratis.
+Kode server ini **HANYA BISA DIGUNAKAN** di aplikasi ViGeNesia+ kelompok kami buat ([disini](https://github.com/andrr64/vigenesia-ubsi)). Jika anda masih menggunakan kode versi lama flutter ViGeNesia dari UBSI maka **AKAN TERJADI KESALAHAN**. Silahkan buka link app ViGeNesi+ yang kami sudah buat, gratis.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

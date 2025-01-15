@@ -1,16 +1,8 @@
-import { where } from "sequelize";
 import Motivasi from "../model/motivasi.model.js";
 import User from "../model/user.model.js";
-import {
-  getStorage,
-  ref,
-  uploadBytes,
-  getDownloadURL,
-  deleteObject,
-} from "firebase/storage";
+import { vigenesiaStorageGetFileLink, vigenesiaStorageUploadFile } from "./vigenesia-storage.controller.js";
 
 export const postMotivasi = async (req, res) => {
-  const storage = getStorage();
   try {
     const gambar = req.file;
     const { iduser, isi_motivasi } = req.body;
@@ -22,44 +14,39 @@ export const postMotivasi = async (req, res) => {
       });
     }
 
-    let fileUrl = null;
+    let fileName = null;
 
     // **Kondisi 1: Ada file gambar**
     if (gambar) {
-      const fileRef = ref(
-        storage,
-        `vigenesia/motivasi/${Date.now()}-${gambar.originalname}`
-      );
-      const uploadResult = await uploadBytes(fileRef, gambar.buffer);
-      fileUrl = await getDownloadURL(uploadResult.ref);
+      const uploadResult = await vigenesiaStorageUploadFile(gambar);
+      fileName = uploadResult.fileName;
     }
 
     // Simpan data ke database
     const motivasi = await Motivasi.create({
       iduser,
       isi_motivasi,
-      link_gambar: fileUrl, // Bisa null jika tidak ada gambar
+      link_gambar: fileName, // Bisa null jika tidak ada gambar
       tanggal_input: new Date().toISOString(),
       tanggal_update: new Date().toISOString(),
     });
 
-    res.status(201).json({
+    return res.status(201).json({
       status: true,
       message: "Motivasi berhasil diunggah.",
       data: motivasi,
     });
   } catch (error) {
     console.error("Error:", error);
+    ///TODO: hapus file jika terjadi kesalahan
+    // if (req.file) {
+    //   const fileRef = ref(storage, `vigenesia/motivasi/${req.file.filename}`);
+    //   await deleteObject(fileRef).catch((err) => {
+    //     console.error("Gagal menghapus file:", err);
+    //   });
+    // }
 
-    // Hapus file jika terjadi kesalahan
-    if (req.file) {
-      const fileRef = ref(storage, `vigenesia/motivasi/${req.file.filename}`);
-      await deleteObject(fileRef).catch((err) => {
-        console.error("Gagal menghapus file:", err);
-      });
-    }
-
-    res.status(500).json({
+    return res.status(500).json({
       status: false,
       message: "Terjadi kesalahan, silakan coba lagi.",
     });
@@ -109,6 +96,7 @@ export const getMotivasi = async (req, res) => {
       // Gabungkan data motivasi dengan user
       const result = motivasiData.map((motivasi) => {
         const motivasiObj = motivasi.toJSON();
+        motivasiObj.link_gambar = vigenesiaStorageGetFileLink(motivasiObj.link_gambar);
         motivasiObj.user = userMap[motivasi.iduser] || null; // Tambahkan data user jika ada
         return motivasiObj;
       });
@@ -128,12 +116,9 @@ export const getMotivasi = async (req, res) => {
 };
 
 export const updateMotivasi = async (req, res) => {
-  const clientIp = req.ip; // Dapatkan IP klien
-
   const { iduser, idmotivasi } = req.query;
   const { isi_motivasi, link_gambar } = req.body;
   const gambar = req.file;
-  const storage = getStorage();
 
   try {
     const motivasi = await Motivasi.findOne({
@@ -147,27 +132,12 @@ export const updateMotivasi = async (req, res) => {
     }
 
     if (gambar) {
-      const fileRef = ref(
-        storage,
-        `vigenesia/motivasi/${Date.now()}-${gambar.originalname}`
-      );
-      const uploadResult = await uploadBytes(fileRef, gambar.buffer);
-      const fileUrl = await getDownloadURL(uploadResult.ref);
-      try {
-        if (motivasi.link_gambar?.length > 0) {
-          const oldFileRef = ref(storage, motivasi.link_gambar);
-          await deleteObject(oldFileRef);
-        }
-      } catch (_) {
-
-      } finally {
-        motivasi.link_gambar = fileUrl;
-      }
+      ///TODO: hapus foto lama jika ada
+      const uploadResult = await vigenesiaStorageUploadFile(gambar);
+      motivasi.link_gambar = `${process.env.VIGENESIA_STORAGE_ENDPOINT}/file/${uploadResult.fileName}`;
     } else if (link_gambar === "") {
       try {
-        const oldFileRef = ref(storage, motivasi.link_gambar);
-        await deleteObject(oldFileRef);
-        console.log(`File lama '${motivasi.link_gambar}' berhasil dihapus.`);
+        ///TODO: hapus gambar jika user menghapus gambar di postingan
       } catch (error) {
         console.log(`Exception: ${error}`);
       } finally {
@@ -246,14 +216,7 @@ export const deleteMotivasi = async (req, res) => {
 
     // Jika ada gambar, hapus file dari Firebase Storage
     if (motivasi.link_gambar) {
-      const storage = getStorage();
-      const fileRef = ref(
-        storage,
-        `motivasi/${motivasi.link_gambar.split("/").pop()}`
-      );
-      await deleteObject(fileRef).catch((err) => {
-        console.error("Gagal menghapus file:", err);
-      });
+      ///TODO: hapus gambara
     }
 
     // Hapus motivasi dari database

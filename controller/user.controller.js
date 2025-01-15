@@ -1,24 +1,16 @@
 import bcrypt from "bcrypt";
 import { validationResult } from "express-validator"; // Untuk validasi input
 import User from "../model/user.model.js";
-import {
-  getStorage,
-  ref,
-  uploadBytes,
-  getDownloadURL,
-  deleteObject,
-} from "firebase/storage";
-import { Op } from "sequelize";
+import { vigenesiaStorageGetFileLink, vigenesiaStorageUploadFile } from "./vigenesia-storage.controller.js";
 
-const DEFAULT_AVATAR =
-  "https://firebasestorage.googleapis.com/v0/b/andreas-web-cloud-5c228.appspot.com/o/vigenesia%2Favatar%2Fdefault-avatar.jpg?alt=media&token=f8ba79bd-de42-4e36-bad4-c59b92f857b4";
+const DEFAULT_AVATAR = `default-avatar.jpg`;
 
 export const filterUserData = (userModel) => {
   return {
     iduser: userModel.iduser,
     nama: userModel.nama,
     email: userModel.email,
-    avatar_link: userModel.avatar_link,
+    avatar_link: vigenesiaStorageGetFileLink(userModel.avatar_link),
     is_active: userModel.is_active,
     profesi: userModel.profesi,
     created: userModel.created,
@@ -167,7 +159,6 @@ export const userLogin = async (req, res) => {
 };
 
 export const userUpdate_avatar = async (req, res) => {
-  const storage = getStorage();
   try {
     const avatar = req.file;
     const { iduser } = req.query;
@@ -191,25 +182,21 @@ export const userUpdate_avatar = async (req, res) => {
         message: "Data pengguna tidak ditemukan",
       });
     }
-    const fileRef = ref(
-      storage,
-      `vigenesia/avatar/${Date.now()}-${avatar.originalname}`
-    );
-    const uploadResult = await uploadBytes(fileRef, avatar.buffer);
-    const fileUrl = await getDownloadURL(uploadResult.ref);
+
+    const uploadResult = await vigenesiaStorageUploadFile(avatar);
+    const fileName = uploadResult.fileName;
 
     if (user.avatar_link && user.avatar_link != DEFAULT_AVATAR) {
-      const oldRef = ref(storage, user.avatar_link);
-      await deleteObject(oldRef);
+      ///TODO: delete foto profil lama
     }
 
     // Update user.avatar_link with new URL
-    user.avatar_link = fileUrl;
+    user.avatar_link = fileName;
     await user.save(); // Assuming this saves the user object to the database
 
     res.status(200).json({
       status: true,
-      data: fileUrl,
+      data: vigenesiaStorageGetFileLink(fileName),
       message: "Avatar berhasil diupdate!",
     });
   } catch (error) {
@@ -222,7 +209,6 @@ export const userUpdate_avatar = async (req, res) => {
 
 export const userUpdate_data = async (req, res) => {
   try {
-    const storage = getStorage();
     const { iduser } = req.query;
     const { email, nama, password_konfirmasi, profesi, password_baru } = req.body;
     const avatar = req.file;
@@ -289,18 +275,21 @@ export const userUpdate_data = async (req, res) => {
       const hashedPassword = await bcrypt.hash(password_baru, 10);
       user.password = hashedPassword;
     }
-    if (avatar != null && avatar != undefined) {
-      const fileRef = ref(storage, `vigenesia/avatar/${Date.now()}`);
-      const uploadResult = await uploadBytes(fileRef, avatar.buffer);
-      const fileUrl = await getDownloadURL(uploadResult.ref);
 
-      if (user.avatar_link && user.avatar_link != DEFAULT_AVATAR) {
-        const oldRef = ref(storage, user.avatar_link);
-        await deleteObject(oldRef);
+    if (avatar) {
+      // Upload file avatar baru
+      const uploadResult = await vigenesiaStorageUploadFile(avatar);
+      const fileName = uploadResult.fileName;
+
+      // Jika sebelumnya ada avatar yang bukan default, hapus yang lama
+      if (user.avatar_link && user.avatar_link !== DEFAULT_AVATAR) {
+        // TODO: Hapus foto profil lama dari penyimpanan
       }
-      // Update user.avatar_link with new URL
-      user.avatar_link = fileUrl;
+
+      // Update user.avatar_link dengan URL baru
+      user.avatar_link = fileName;
     }
+
     await user.save(); // Menyimpan perubahan ke database
 
     res.status(200).json({

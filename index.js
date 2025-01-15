@@ -4,8 +4,6 @@ import user_route from './routes/user.route.js';
 import motivasi_route from './routes/motivasi.route.js';
 import motivasi_komentar_route from './routes/motivasi.komentar.route.js';
 import sequelize from "./db.js";
-import { initializeApp } from "firebase/app";
-import firebaseConfig from "./firebase/config.js";
 
 import os from 'os'; // Perbaiki impor os di sini
 
@@ -26,8 +24,6 @@ dotenv.config();
 const app = express();
 
 app.use(express.json());
-
-export const firebaseApp = initializeApp(firebaseConfig);
 
 // Fungsi untuk mencoba koneksi ke database dengan retry
 const connectToDatabase = async (maxRetries = 5, retryInterval = 5000) => {

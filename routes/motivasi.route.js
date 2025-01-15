@@ -2,7 +2,8 @@ import express from "express"
 import { deleteMotivasi, getMotivasi, postMotivasi, updateMotivasi } from "../controller/motivasi.controller.js";
 import multer from 'multer';
 
-const upload = multer({ limits: { fileSize: 10 * 1024 * 1024 } }); // 10MB
+const storage = multer.memoryStorage();
+const upload = multer({storage}); // 10MB
 
 const router = express.Router();
 
